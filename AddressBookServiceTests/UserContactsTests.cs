@@ -48,7 +48,7 @@ namespace AddressBookServiceTests
 
         private static List<IContact> UserContacts(IUser user)
         {
-            var contacts = new List<IContact> {new Contact {UserName = user.UserCredential.UserName, Addresses = new List<IAddress>()}};
+            var contacts = new List<IContact> {new Contact {UserName = user.UserCredential.UserName, Addresses = new List<IAddress>(), Emails = new List<IEmail>()}};
 
             return contacts;
         }

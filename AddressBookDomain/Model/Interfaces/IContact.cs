@@ -7,8 +7,8 @@ namespace AddressBookDomain.Model.Interfaces
         string UserName { get; set; }
         string ContactId { get; set; }
         List<IAddress> Addresses { get; set; }
-        List<Phone> Phones { get; set; }
-        List<Email> Emails { get; set; }
+        List<IPhone> Phones { get; set; }
+        List<IEmail> Emails { get; set; }
         bool Self { get; set; }
     }
 }

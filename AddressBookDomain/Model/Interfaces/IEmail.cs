@@ -2,7 +2,7 @@
 
 namespace AddressBookDomain.Model.Interfaces
 {
-    internal interface IEmail
+    public interface IEmail
     {
         string EmailAddress { get; set; }
         EmailType EmailType { get; set; }

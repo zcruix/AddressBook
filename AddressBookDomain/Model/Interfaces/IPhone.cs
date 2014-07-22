@@ -2,7 +2,7 @@
 
 namespace AddressBookDomain.Model.Interfaces
 {
-    internal interface IPhone
+    public interface IPhone
     {
         string PhoneNumber { get; set; }
         PhoneType PhoneType { get; set; }
