@@ -1,5 +1,4 @@
-﻿using System.Net;
-using AddressBookDomain.Model;
+﻿using AddressBookDataStore.Interfaces;
 using AddressBookServiceGateway.Contracts;
 using AddressBookServiceGateway.Implementation;
 using AddressBookServiceGateway.Interfaces;
@@ -34,22 +33,17 @@ namespace AddressBookServiceTests
         [TestInitialize]
         public void Initialize()
         {
-            _addressBookService = new AddressBookService(new MockAddressBookRepository());
-            var user = new User
-            {
-                UserCredential = new NetworkCredential {UserName = Username, Password = Validpassword}
-            };
-
-            _addressBookService.SaveUser(new SaveUserRequest {User = user});
+            IAddressBookRepository addressBookRepository = new MockAddressBookRepository();
+            _addressBookService = new AddressBookService(addressBookRepository);
+            MockUser.AddTestableUser(_addressBookService, Username, Validpassword);
         }
-
 
         private void WhenUserLogsinWith(string password)
         {
             _loginResponse =
                 _addressBookService.Login(new LoginRequest
                 {
-                    UserCredential = new NetworkCredential {UserName = Username, Password = password}
+                    UserCredential = MockUser.GetTestableUserCredentials(Username, password)
                 });
         }
     }

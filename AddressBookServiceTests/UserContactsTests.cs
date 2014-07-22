@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using AddressBookDataStore.Interfaces;
 using AddressBookDomain.Model;
 using AddressBookDomain.Model.Interfaces;
 using AddressBookServiceGateway.Contracts;
@@ -29,36 +30,15 @@ namespace AddressBookServiceTests
         [TestInitialize]
         public void Initialize()
         {
-            _addressBookService = new AddressBookService(new MockAddressBookRepository());
-            _loggedInUser = new User
-            {
-                UserCredential = GetUserCredentials()
-            };
-
-            _addressBookService.SaveUser(new SaveUserRequest {User = _loggedInUser});
-
-            _addressBookService.Login(new LoginRequest
-            {
-                UserCredential = GetUserCredentials()
-            });
-
-            _addressBookService.SaveContacts(new SaveContactRequest { Contacts = UserContacts(_loggedInUser) });
-
-        }
-
-        private static List<IContact> UserContacts(IUser user)
-        {
-            var contacts = new List<IContact> {new Contact {UserName = user.UserCredential.UserName, Addresses = new List<IAddress>(), Emails = new List<IEmail>()}};
-
-            return contacts;
-        }
-
-        private static NetworkCredential GetUserCredentials()
-        {
             const string username = "Username";
             const string validpassword = "ValidPassword";
 
-            return new NetworkCredential { UserName = username, Password = validpassword };
+            IAddressBookRepository addressBookRepository = new MockAddressBookRepository();
+            _addressBookService = new AddressBookService(addressBookRepository);
+
+            _loggedInUser = MockUser.LoggedInTestableUser(_addressBookService, username, validpassword);            
+
+            _addressBookService.SaveContacts(new SaveContactRequest { Contacts = MockUser.UserContacts(_loggedInUser) });
         }
     }
 }

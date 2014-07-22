@@ -31,7 +31,7 @@ namespace AddressBookServiceGateway.Implementation
 
         public ISaveUserResponse SaveUser(ISaveUserRequest saveUserRequest)
         {
-            return new SaveUserResponse { HasBeenAdded = _addressBookRepository.AddUser(saveUserRequest.User) };
+            return new SaveUserResponse { HasBeenAdded = _addressBookRepository.AddUser(saveUserRequest.User), User = saveUserRequest.User};
         }
 
         public IGetUserResponse GetUser(IGetUserRequest getUserRequest)

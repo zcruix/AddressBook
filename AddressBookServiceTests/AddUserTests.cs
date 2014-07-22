@@ -1,6 +1,5 @@
-﻿using System.Net;
-using AddressBookDataStore.Exceptions;
-using AddressBookDomain.Model;
+﻿using AddressBookDataStore.Exceptions;
+using AddressBookDomain.Model.Interfaces;
 using AddressBookServiceGateway.Contracts;
 using AddressBookServiceGateway.Implementation;
 using AddressBookServiceGateway.Interfaces;
@@ -13,14 +12,13 @@ namespace AddressBookServiceTests
     public class AddUserTests
     {
         private IAddressBookService _addressBookService;
+        private IUser _user;
 
         [TestMethod]
         public void UserWithValidUserNameAndValidPassword_CanGetTheUser()
-        {
-            var user = GetNewUser();
-
+        {            
             var getUserResponse =
-                _addressBookService.GetUser(new GetUserRequest {UserCredential = user.UserCredential});
+                _addressBookService.GetUser(new GetUserRequest {UserCredential = _user.UserCredential});
 
             Assert.IsNotNull(getUserResponse.User);
         }
@@ -29,7 +27,6 @@ namespace AddressBookServiceTests
         [ExpectedException(typeof(DuplicateUserNameException))]
         public void AddingOtherUserWithTheSameUserName_ShouldThrowDuplicateUserNameException()
         {
-            GetNewUser();
             GetNewUserWithTheSameUserNameAsBefore();
         }
         
@@ -37,17 +34,12 @@ namespace AddressBookServiceTests
         public void Initialize()
         {
             _addressBookService = new AddressBookService(new MockAddressBookRepository());
+            _user = GetNewUser();
         }
 
-        private User GetNewUser()
+        private IUser GetNewUser()
         {
-            var user = new User
-            {
-                UserCredential = new NetworkCredential {UserName = "ValidUserName", Password = "ValidPassword"}
-            };
-
-            _addressBookService.SaveUser(new SaveUserRequest {User = user});
-            return user;
+            return MockUser.AddTestableUser(_addressBookService, "ValidUserName", "ValidPassword");
         }
 
         private void GetNewUserWithTheSameUserNameAsBefore()
