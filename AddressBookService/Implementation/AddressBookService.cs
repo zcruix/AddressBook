@@ -31,7 +31,7 @@ namespace AddressBookServiceGateway.Implementation
 
         public ISaveUserResponse SaveUser(ISaveUserRequest saveUserRequest)
         {
-            return new SaveUserResponse { HasBeenAdded = _addressBookRepository.AddUser(saveUserRequest.User), User = saveUserRequest.User};
+            return new SaveUserResponse { HasBeenAdded = _addressBookRepository.AddUser(saveUserRequest.User), User = saveUserRequest.User };
         }
 
         public IGetUserResponse GetUser(IGetUserRequest getUserRequest)
@@ -52,7 +52,12 @@ namespace AddressBookServiceGateway.Implementation
 
         public IGetContactsResponse GetContacts(IGetContactsRequest getContactsRequest)
         {
-            return _isUserAuthenticated ? new GetContactsResponse { Contacts = _addressBookRepository.GetContacts() } : new GetContactsResponse { Contacts = new List<IContact>() };
+            return _isUserAuthenticated
+                ? new GetContactsResponse
+                {
+                    Contacts = _addressBookRepository.GetContacts(getContactsRequest.User.UserCredential.UserName)
+                }
+                : new GetContactsResponse {Contacts = new List<IContact>()};
         }
 
         public ILogoutResponse Logout(ILogoutRequest logoutRequest)

@@ -31,9 +31,9 @@ namespace MockAddressBookDataStore
             return true;
         }
 
-        public List<IContact> GetContacts()
+        public List<IContact> GetContacts(string userName)
         {
-            return _contacts;
+            return _contacts.FindAll(c => c.IsUser(userName));
         }
 
         public bool AddContacts(List<IContact> contacts)

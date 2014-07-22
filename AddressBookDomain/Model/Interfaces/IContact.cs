@@ -10,5 +10,7 @@ namespace AddressBookDomain.Model.Interfaces
         List<IPhone> Phones { get; set; }
         List<IEmail> Emails { get; set; }
         bool Self { get; set; }
+        bool IsUser(string userName);
+        string Summary();
     }
 }

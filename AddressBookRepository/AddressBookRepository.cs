@@ -23,10 +23,11 @@ namespace AddressBookDataStore
             throw new System.NotImplementedException();
         }
 
-        public List<IContact> GetContacts()
+        public List<IContact> GetContacts(string userName)
         {
             throw new System.NotImplementedException();
         }
+        
 
         public bool AddContacts(List<IContact> contacts)
         {
