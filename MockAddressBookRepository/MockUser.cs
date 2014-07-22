@@ -5,7 +5,7 @@ using AddressBookDomain.Model.Interfaces;
 using AddressBookServiceGateway.Contracts;
 using AddressBookServiceGateway.Interfaces;
 
-namespace AddressBookServiceTests
+namespace MockAddressBookDataStore
 {
     public class MockUser
     {
