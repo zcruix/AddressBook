@@ -2,8 +2,9 @@
 
 namespace AddressBookDomain.Model.Interfaces
 {
-    internal interface IAddress
+    public interface IAddress
     {
+        string UserName { get; set; }
         AddressType AddressType { get; set; }
         string City { get; set; }
         string HouseNumber { get; set; }
@@ -11,5 +12,6 @@ namespace AddressBookDomain.Model.Interfaces
         string StreetLine1 { get; set; }
         string StreetLine2 { get; set; }
         string Zip { get; set; }
+        bool Self { get; }
     }
 }

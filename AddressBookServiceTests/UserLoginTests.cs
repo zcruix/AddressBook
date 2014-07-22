@@ -14,7 +14,7 @@ namespace AddressBookServiceTests
         private const string Username = "Username";
         private const string Validpassword = "ValidPassword";
         private const string Invalidpassword = "InValidPassword";
-        private AddressBookService _addressBookService;
+        private IAddressBookService _addressBookService;
         private ILoginResponse _loginResponse;
 
         [TestMethod]

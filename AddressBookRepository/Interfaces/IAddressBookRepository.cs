@@ -1,4 +1,5 @@
-﻿using AddressBookDomain.Model.Interfaces;
+﻿using System.Collections.Generic;
+using AddressBookDomain.Model.Interfaces;
 
 namespace AddressBookDataStore.Interfaces
 {
@@ -6,5 +7,7 @@ namespace AddressBookDataStore.Interfaces
     {
         IUser GetUser(string userName);
         bool AddUser(IUser user);
+        List<IContact> GetContacts();
+        bool AddContacts(List<IContact> contacts);
     }
 }

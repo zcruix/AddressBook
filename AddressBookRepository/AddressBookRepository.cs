@@ -1,4 +1,5 @@
-﻿using AddressBookDataStore.Interfaces;
+﻿using System.Collections.Generic;
+using AddressBookDataStore.Interfaces;
 using AddressBookDomain.Model.Interfaces;
 
 namespace AddressBookDataStore
@@ -18,6 +19,16 @@ namespace AddressBookDataStore
         }
 
         public bool AddUser(IUser user)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public List<IContact> GetContacts()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public bool AddContacts(List<IContact> contacts)
         {
             throw new System.NotImplementedException();
         }

@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using AddressBookDataStore;
 using AddressBookDataStore.Interfaces;
+using AddressBookDomain.Model.Interfaces;
 using AddressBookServiceGateway.Contracts;
 using AddressBookServiceGateway.Interfaces;
 
@@ -22,24 +24,25 @@ namespace AddressBookServiceGateway.Implementation
             if (loginRequest == null || string.IsNullOrEmpty(loginRequest.UserCredential.UserName))
                 throw new ArgumentNullException("loginRequest");
 
-            _isUserAuthenticated  = _addressBookRepository.GetUser(loginRequest.UserCredential.UserName).IsAuthenticated(loginRequest.UserCredential.Password);
+            _isUserAuthenticated = _addressBookRepository.GetUser(loginRequest.UserCredential.UserName).IsAuthenticated(loginRequest.UserCredential.Password);
 
-            return new LoginResponse {IsLoggedIn = _isUserAuthenticated};
+            return new LoginResponse { IsLoggedIn = _isUserAuthenticated };
         }
 
         public ISaveUserResponse SaveUser(ISaveUserRequest saveUserRequest)
         {
-            return new SaveUserResponse {HasBeenAdded = _addressBookRepository.AddUser(saveUserRequest.User)};
+            return new SaveUserResponse { HasBeenAdded = _addressBookRepository.AddUser(saveUserRequest.User) };
         }
 
         public IGetUserResponse GetUser(IGetUserRequest getUserRequest)
         {
-            return new GetUserResponse {User = _addressBookRepository.GetUser(getUserRequest.UserCredential.UserName)};
+            return new GetUserResponse { User = _addressBookRepository.GetUser(getUserRequest.UserCredential.UserName) };
         }
 
         public ISaveContactsResponse SaveContacts(ISaveContactsRequest saveContactRequest)
         {
-            throw new NotImplementedException();
+            var hasSavedContacts = _addressBookRepository.AddContacts(saveContactRequest.Contacts);
+            return new SaveContactsResponse { HasSavedContacts = hasSavedContacts };
         }
 
         public IRemoveContactsResponse RemoveContacts(IRemoveContactsRequest removeContactsRequest)
@@ -49,13 +52,13 @@ namespace AddressBookServiceGateway.Implementation
 
         public IGetContactsResponse GetContacts(IGetContactsRequest getContactsRequest)
         {
-            throw new NotImplementedException();
+            return _isUserAuthenticated ? new GetContactsResponse { Contacts = _addressBookRepository.GetContacts() } : new GetContactsResponse { Contacts = new List<IContact>() };
         }
 
         public ILogoutResponse Logout(ILogoutRequest logoutRequest)
         {
             throw new NotImplementedException();
         }
-        
+
     }
 }
