@@ -15,9 +15,9 @@ namespace AddressBookServiceTests
         private IUser _user;
 
         [TestMethod]
-        public void UserWithValidUserNameAndValidPasswordCanGetTheUser()
+        public void UserWithValidUserNameAndValidPassword_CanGetTheUser()
         {
-            IGetUserResponse getUserResponse =
+            var getUserResponse =
                 _addressBookService.GetUser(new GetUserRequest {UserCredential = _user.UserCredential});
 
             Assert.IsNotNull(getUserResponse.User);
@@ -25,7 +25,7 @@ namespace AddressBookServiceTests
 
         [TestMethod]
         [ExpectedException(typeof (DuplicateUserNameException))]
-        public void AddingOtherUserWithTheSameUserNameShouldThrowDuplicateUserNameException()
+        public void AddingOtherUserWithTheSameUserName_ThrowsDuplicateUserNameException()
         {
             GetNewUserWithTheSameUserNameAsBefore();
         }

@@ -17,7 +17,7 @@ namespace AddressBookServiceTests
         private IUser _loggedInUser;
 
         [TestMethod]
-        public void ForALoggedInUserGetHisContacts()
+        public void ForALoggedInUser_GetHisContacts()
         {
             _getContactsResponse = _addressBookService.GetContacts(new GetContactsRequest {User = _loggedInUser});
             Assert.IsTrue(_getContactsResponse.Contacts.Any());
