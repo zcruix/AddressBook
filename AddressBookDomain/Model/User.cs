@@ -15,5 +15,10 @@ namespace AddressBookDomain.Model
         {
             return UserCredential.Password.Equals(password);
         }
+
+        public bool IsUser(string userName)
+        {
+            return UserCredential.UserName.Equals(userName);
+        }
     }
 }

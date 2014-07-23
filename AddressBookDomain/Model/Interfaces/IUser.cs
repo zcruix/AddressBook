@@ -10,5 +10,6 @@ namespace AddressBookDomain.Model.Interfaces
         NetworkCredential UserCredential { get; set; }
         List<IContact> Contacts { get; set; }
         bool IsAuthenticated(string password);
+        bool IsUser(string userName);
     }
 }

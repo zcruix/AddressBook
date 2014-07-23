@@ -19,7 +19,7 @@ namespace MockAddressBookDataStore
 
         public IUser GetUser(string userName)
         {
-            return _users.Find(u => u.UserCredential.UserName.Equals(userName));
+            return _users.Find(u => u.IsUser(userName));
         }
 
         public bool AddUser(IUser user)
