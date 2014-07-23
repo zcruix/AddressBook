@@ -17,14 +17,14 @@ namespace AddressBookServiceTests
         private ILoginResponse _loginResponse;
 
         [TestMethod]
-        public void UserWithInValidPasswordCannotLogin()
+        public void UserWithInValidPassword_CannotLogin()
         {
             WhenUserLogsinWith(Invalidpassword);
             Assert.IsFalse(_loginResponse.IsLoggedIn);
         }
 
         [TestMethod]
-        public void UserWithValidPasswordCanLogin()
+        public void UserWithValidPassword_CanLogin()
         {
             WhenUserLogsinWith(Validpassword);
             Assert.IsTrue(_loginResponse.IsLoggedIn);
