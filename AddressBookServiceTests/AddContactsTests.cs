@@ -38,7 +38,7 @@ namespace AddressBookServiceTests
         [TestMethod]
         public void LoggedInUserAddsTwoContacts_ShouldHaveTwoContacts()
         {            
-            WhenSavesTwoContacts();
+            WhenSaveAnotherContactAfterInitialized();
             ThenTheGetContactsShouldReturnTwoContacts();
         }        
 
@@ -106,7 +106,7 @@ namespace AddressBookServiceTests
             _saveContactsresponse = _addressBookService.SaveContacts(saveContactRequest);
         }
 
-        private void WhenSavesTwoContacts()
+        private void WhenSaveAnotherContactAfterInitialized()
         {
             var contacts = new List<IContact>
                            {
