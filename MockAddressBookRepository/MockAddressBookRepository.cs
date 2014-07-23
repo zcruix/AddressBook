@@ -24,7 +24,7 @@ namespace MockAddressBookDataStore
 
         public bool AddUser(IUser user)
         {
-            if (GetUser(user.UserCredential.UserName) != null)
+            if (GetUser(user.UserName) != null)
                 throw new DuplicateUserNameException();
 
             _users.Add(user);
