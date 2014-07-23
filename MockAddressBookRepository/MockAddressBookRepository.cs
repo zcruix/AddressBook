@@ -38,7 +38,26 @@ namespace MockAddressBookDataStore
 
         public bool AddContacts(List<IContact> contacts)
         {
-            if (!contacts.Any()) return false;
+            if (contacts == null || !contacts.Any()) return false;
+
+            var firstContact = contacts.FirstOrDefault();
+
+            var userContacts = new List<IContact>();
+            if ( firstContact != null)
+            {
+                var username = firstContact.UserName;
+                userContacts.AddRange(GetContacts(username));
+                userContacts.AddRange(contacts);
+
+                var duplicateEmails = userContacts.Select(x => x.Emails).GroupBy(x => x)
+                    .Where(g => g.Count() > 1)
+                    .Select(y => y.Key)
+                    .ToList();
+
+                if(duplicateEmails.Any())
+                    throw new DuplicateContactEmailAddressFoundException();
+
+            }
 
             _contacts.AddRange(contacts);
             return true;

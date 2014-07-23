@@ -51,7 +51,8 @@ namespace AddressBookServiceGateway.Implementation
 
         public ISaveContactsResponse SaveContacts(ISaveContactsRequest saveContactRequest)
         {
-            bool hasSavedContacts = _addressBookRepository.AddContacts(saveContactRequest.Contacts);
+            var hasSavedContacts = _addressBookRepository.AddContacts(saveContactRequest.Contacts);
+
             return new SaveContactsResponse {HasSavedContacts = hasSavedContacts};
         }
 

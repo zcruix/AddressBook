@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using AddressBookDataStore.Exceptions;
+using AddressBookDomain.Model;
 using AddressBookDomain.Model.Interfaces;
 using AddressBookServiceGateway.Contracts;
 using AddressBookServiceGateway.Implementation;
@@ -25,7 +27,6 @@ namespace AddressBookServiceTests
             ThenTheContactIsSaved();
         }
 
-
         [TestMethod]
         public void ALoggedInUser_CanAddContactAndFindContact()
         {
@@ -34,18 +35,35 @@ namespace AddressBookServiceTests
             ThenTheContactIsFound();
         }
 
+        [TestMethod]
+        public void LoggedInUserAddsTwoContacts_ShouldHaveTwoContacts()
+        {            
+            WhenSavesTwoContacts();
+            ThenTheGetContactsShouldReturnTwoContacts();
+        }        
+
+        [TestMethod]
+        [ExpectedException(typeof(DuplicateContactEmailAddressFoundException))]
+        public void LoggedInUser_CannotAddContactsWithSameEmailAddress()
+        {
+            GivenAContactWithAValidEmailAddress();            
+            WhenSaveContact();            
+        }
+
         [TestInitialize]
         public void Initialize()
         {
-            const string username = "Username";
-            const string validpassword = "ValidPassword";
-
             var addressBookRepository = new MockAddressBookRepository();
             _addressBookService = new AddressBookService(addressBookRepository);
 
-            _loggedInUser = MockUser.LoggedInTestableUser(_addressBookService, username, validpassword);
+            GivenThisLoggedInUser(Username, Validpassword);
 
             _addressBookService.SaveContacts(new SaveContactRequest { Contacts = MockUser.UserContacts(_loggedInUser) });
+        }
+
+        private void GivenThisLoggedInUser(string username, string validpassword)
+        {
+            _loggedInUser = MockUser.LoggedInTestableUser(_addressBookService, username, validpassword);
         }
 
         private void ThenTheContactIsFound()
@@ -69,12 +87,47 @@ namespace AddressBookServiceTests
 
         private void WhenSaveContact()
         {
-            _saveContactsresponse =_addressBookService.SaveContacts(new SaveContactRequest { Contacts = _someContacts });
+            AddContact(new SaveContactRequest { Contacts = _someContacts });
         }
 
         private void GivenThisContact()
         {
             _someContacts = MockUser.UserContacts(_loggedInUser);
-        }      
+        }
+
+        private void GivenAContactWithAValidEmailAddress()
+        {
+            _someContacts = MockUser.UserContacts(_loggedInUser);
+            AddContact(new SaveContactRequest { Contacts = _someContacts });
+        }
+
+        private void AddContact(ISaveContactsRequest saveContactRequest)
+        {
+            _saveContactsresponse = _addressBookService.SaveContacts(saveContactRequest);
+        }
+
+        private void WhenSavesTwoContacts()
+        {
+            var contacts = new List<IContact>
+                           {
+                               new Contact
+                               {
+                                   UserName = _loggedInUser.UserCredential.UserName,
+                                   Addresses = new List<IAddress>(),
+                                   Emails = new List<IEmail>{new Email{EmailAddress = "email2@email.com"}}
+                               }
+                           };
+
+            _addressBookService.SaveContacts(new SaveContactRequest{Contacts = contacts});
+        }
+
+        private void ThenTheGetContactsShouldReturnTwoContacts()
+        {
+            var getContactsResponse =_addressBookService.GetContacts(new GetContactsRequest {User = _loggedInUser});
+            Assert.IsTrue(getContactsResponse.Contacts.Count == 2);
+        }
+
+        private const string Username = "Username";
+        private const string Validpassword = "ValidPassword";
     }
 }
