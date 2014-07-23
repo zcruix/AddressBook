@@ -34,6 +34,20 @@ namespace AddressBookServiceTests
             ThenTheContactIsFound();
         }
 
+        [TestInitialize]
+        public void Initialize()
+        {
+            const string username = "Username";
+            const string validpassword = "ValidPassword";
+
+            var addressBookRepository = new MockAddressBookRepository();
+            _addressBookService = new AddressBookService(addressBookRepository);
+
+            _loggedInUser = MockUser.LoggedInTestableUser(_addressBookService, username, validpassword);
+
+            _addressBookService.SaveContacts(new SaveContactRequest { Contacts = MockUser.UserContacts(_loggedInUser) });
+        }
+
         private void ThenTheContactIsFound()
         {
             var emailAddress = MockUser.UserContacts(_loggedInUser).First().Emails.First().EmailAddress;
@@ -42,6 +56,7 @@ namespace AddressBookServiceTests
                 User = _loggedInUser,
                 ContactEmail = emailAddress
             };
+
             var getContactsResponse = _addressBookService.GetContacts(getContactsRequest);
 
             Assert.IsTrue(getContactsResponse.Contacts.Select(c => c.Emails.Find(e => e.EmailAddress.Equals(emailAddress))) != null);
@@ -60,21 +75,6 @@ namespace AddressBookServiceTests
         private void GivenThisContact()
         {
             _someContacts = MockUser.UserContacts(_loggedInUser);
-        }
-
-
-        [TestInitialize]
-        public void Initialize()
-        {
-            const string username = "Username";
-            const string validpassword = "ValidPassword";
-
-            var addressBookRepository = new MockAddressBookRepository();
-            _addressBookService = new AddressBookService(addressBookRepository);
-
-            _loggedInUser = MockUser.LoggedInTestableUser(_addressBookService, username, validpassword);
-
-            _addressBookService.SaveContacts(new SaveContactRequest { Contacts = MockUser.UserContacts(_loggedInUser) });
-        }
+        }      
     }
 }
