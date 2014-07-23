@@ -7,7 +7,7 @@ using AddressBookServiceGateway.Interfaces;
 
 namespace MockAddressBookDataStore
 {
-    public class MockUser
+    public static class MockUser
     {
         public static IUser LoggedInTestableUser(IAddressBookService addressBookService, string username,
             string validpassword)
@@ -42,7 +42,7 @@ namespace MockAddressBookDataStore
                                {
                                    UserName = user.UserCredential.UserName,
                                    Addresses = new List<IAddress>(),
-                                   Emails = new List<IEmail>()
+                                   Emails = new List<IEmail>{new Email{EmailAddress = "email@email.com"}}
                                }
                            };
 

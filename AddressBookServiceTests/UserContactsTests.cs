@@ -23,7 +23,6 @@ namespace AddressBookServiceTests
             Assert.IsTrue(_getContactsResponse.Contacts.Any());
         }
 
-
         [TestInitialize]
         public void Initialize()
         {

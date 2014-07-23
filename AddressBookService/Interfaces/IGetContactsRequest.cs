@@ -5,5 +5,6 @@ namespace AddressBookServiceGateway.Interfaces
     public interface IGetContactsRequest
     {
         IUser User { get; set; }
+        string ContactEmail { get; set; }
     }
 }
