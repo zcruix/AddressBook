@@ -8,13 +8,13 @@ namespace MockAddressBookDataStore
 {
     public class MockAddressBookRepository : IAddressBookRepository
     {
-        private readonly List<IUser> _users;
         private readonly List<IContact> _contacts;
+        private readonly List<IUser> _users;
 
         public MockAddressBookRepository(List<IUser> users = null, List<IContact> contacts = null)
         {
             _users = users ?? new List<IUser>();
-            _contacts = contacts ?? new List<IContact>();            
+            _contacts = contacts ?? new List<IContact>();
         }
 
         public IUser GetUser(string userName)

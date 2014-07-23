@@ -17,14 +17,14 @@ namespace AddressBookServiceTests
         private ILoginResponse _loginResponse;
 
         [TestMethod]
-        public void UserWithInValidPassword_CannotLogin()
+        public void UserWithInValidPasswordCannotLogin()
         {
             WhenUserLogsinWith(Invalidpassword);
             Assert.IsFalse(_loginResponse.IsLoggedIn);
         }
 
         [TestMethod]
-        public void UserWithValidPassword_CanLogin()
+        public void UserWithValidPasswordCanLogin()
         {
             WhenUserLogsinWith(Validpassword);
             Assert.IsTrue(_loginResponse.IsLoggedIn);
@@ -42,9 +42,9 @@ namespace AddressBookServiceTests
         {
             _loginResponse =
                 _addressBookService.Login(new LoginRequest
-                {
-                    UserCredential = MockUser.GetTestableUserCredentials(Username, password)
-                });
+                                          {
+                                              UserCredential = MockUser.GetTestableUserCredentials(Username, password)
+                                          });
         }
     }
 }

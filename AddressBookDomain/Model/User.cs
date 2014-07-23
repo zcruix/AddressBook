@@ -10,7 +10,7 @@ namespace AddressBookDomain.Model
         public string LastName { get; set; }
         public NetworkCredential UserCredential { get; set; }
         public List<IContact> Contacts { get; set; }
-        
+
         public bool IsAuthenticated(string password)
         {
             return UserCredential.Password.Equals(password);

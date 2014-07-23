@@ -9,7 +9,7 @@ namespace AddressBookServiceGateway.Extensions
         public static SecureString GetSecurePassword(this string somepassword)
         {
             var securePassword = new SecureString();
-            foreach (var character in somepassword)
+            foreach (char character in somepassword)
             {
                 securePassword.AppendChar(character);
             }
@@ -18,7 +18,7 @@ namespace AddressBookServiceGateway.Extensions
 
         public static string ConvertToUnSecureString(this SecureString securePassword)
         {
-            var unmanagedString = IntPtr.Zero;
+            IntPtr unmanagedString = IntPtr.Zero;
             try
             {
                 unmanagedString = Marshal.SecureStringToGlobalAllocUnicode(securePassword);

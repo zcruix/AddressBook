@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using AddressBookDataStore.Interfaces;
 using AddressBookDomain.Model.Interfaces;
 
@@ -8,7 +9,7 @@ namespace AddressBookSqlClientProvider
     {
         public List<IContact> GetContacts()
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

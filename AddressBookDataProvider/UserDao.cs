@@ -1,4 +1,5 @@
-﻿using AddressBookDataStore.Interfaces;
+﻿using System;
+using AddressBookDataStore.Interfaces;
 using AddressBookDomain.Model.Interfaces;
 
 namespace AddressBookDataStore
@@ -7,7 +8,7 @@ namespace AddressBookDataStore
     {
         public IUser GetUser(string userName)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

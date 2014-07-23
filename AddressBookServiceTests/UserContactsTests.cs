@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+﻿using System.Linq;
 using AddressBookDataStore.Interfaces;
-using AddressBookDomain.Model;
 using AddressBookDomain.Model.Interfaces;
 using AddressBookServiceGateway.Contracts;
 using AddressBookServiceGateway.Implementation;
@@ -16,11 +13,11 @@ namespace AddressBookServiceTests
     public class UserContactsTests
     {
         private IAddressBookService _addressBookService;
-        private IUser _loggedInUser;
         private IGetContactsResponse _getContactsResponse;
+        private IUser _loggedInUser;
 
         [TestMethod]
-        public void ForALoggedInUser_GetHisContacts()
+        public void ForALoggedInUserGetHisContacts()
         {
             _getContactsResponse = _addressBookService.GetContacts(new GetContactsRequest {User = _loggedInUser});
             Assert.IsTrue(_getContactsResponse.Contacts.Any());
@@ -36,9 +33,9 @@ namespace AddressBookServiceTests
             IAddressBookRepository addressBookRepository = new MockAddressBookRepository();
             _addressBookService = new AddressBookService(addressBookRepository);
 
-            _loggedInUser = MockUser.LoggedInTestableUser(_addressBookService, username, validpassword);            
+            _loggedInUser = MockUser.LoggedInTestableUser(_addressBookService, username, validpassword);
 
-            _addressBookService.SaveContacts(new SaveContactRequest { Contacts = MockUser.UserContacts(_loggedInUser) });
+            _addressBookService.SaveContacts(new SaveContactRequest {Contacts = MockUser.UserContacts(_loggedInUser)});
         }
     }
 }
