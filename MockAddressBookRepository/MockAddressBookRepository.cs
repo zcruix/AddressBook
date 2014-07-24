@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using AddressBookDataStore.Exceptions;
 using AddressBookDataStore.Interfaces;
 using AddressBookDomain.Model.Interfaces;
@@ -48,24 +47,21 @@ namespace MockAddressBookDataStore
 
         private void ValidateNewContactsBeingAddded(List<IContact> contacts)
         {
-            ThrowExceptionIfAnyContactIsFoundWithNoContactId(contacts);            
-            ThrowExceptionIfDuplicateEmailAddressesOrContactIdFoundInTheUserContacts(contacts);
+            ThrowExceptionIfAnyContactIsFoundWithNoContactId(contacts);
+            SearchForDuplicate<string, DuplicateContactIdFoundException>(contacts.Select(c => c.ContactId));
+            ThrowExceptionIfDuplicateEmailAddressesFoundInTheUserContacts(contacts);
         }
 
-        private void ThrowExceptionIfDuplicateEmailAddressesOrContactIdFoundInTheUserContacts(IEnumerable<IContact> contacts)
+        private void ThrowExceptionIfDuplicateEmailAddressesFoundInTheUserContacts(IEnumerable<IContact> contacts)
         {
-            var newContactsBeingAdded = contacts as IList<IContact> ?? contacts.ToList();
-
-            SearchForDuplicate<string, DuplicateContactIdFoundException>(newContactsBeingAdded.Select(c => c.ContactId));
-
-            var firstContact = newContactsBeingAdded.FirstOrDefault();
+            var newContactsToBeAdded = contacts as IList<IContact> ?? contacts.ToList();
+            var firstContact = newContactsToBeAdded.FirstOrDefault();
             if (firstContact == null) return;
 
             var username = firstContact.UserName;
-
             var userContacts = new List<IContact>();
             userContacts.AddRange(GetContacts(username));
-            userContacts.AddRange(newContactsBeingAdded);            
+            userContacts.AddRange(newContactsToBeAdded);            
 
             SearchForDuplicate<List<IEmail>, DuplicateContactEmailAddressFoundException>(userContacts.Select(c => c.Emails));            
         }
