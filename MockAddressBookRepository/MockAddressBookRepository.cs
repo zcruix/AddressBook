@@ -48,7 +48,7 @@ namespace MockAddressBookDataStore
         private void ValidateNewContactsBeingAddded(List<IContact> contacts)
         {
             ThrowExceptionIfAnyContactIsFoundWithNoContactId(contacts);
-            SearchForDuplicate<string, DuplicateContactIdFoundException>(contacts.Select(c => c.ContactId));
+            ThrowExceptionIfADuplicateItemFound<string, DuplicateContactIdFoundException>(contacts.Select(c => c.ContactId));
             ThrowExceptionIfDuplicateEmailAddressesFoundInTheUserContacts(contacts);
         }
 
@@ -63,10 +63,10 @@ namespace MockAddressBookDataStore
             userContacts.AddRange(GetContacts(username));
             userContacts.AddRange(newContactsToBeAdded);            
 
-            SearchForDuplicate<List<IEmail>, DuplicateContactEmailAddressFoundException>(userContacts.Select(c => c.Emails));            
+            ThrowExceptionIfADuplicateItemFound<List<IEmail>, DuplicateContactEmailAddressFoundException>(userContacts.Select(c => c.Emails));            
         }
 
-        private static void SearchForDuplicate<T, TE>(IEnumerable<T> items) where TE : Exception, new()
+        private static void ThrowExceptionIfADuplicateItemFound<T, TE>(IEnumerable<T> items) where TE : Exception, new()
         {
             var duplicates = items.GroupBy(x => x)
                 .Where(g => g.Count() > 1)
