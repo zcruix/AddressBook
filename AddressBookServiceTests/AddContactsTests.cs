@@ -71,6 +71,14 @@ namespace AddressBookServiceTests
             WhenSaveContact();
         }
 
+        [TestMethod]
+        [ExpectedException(typeof(DuplicateContactIdFoundException))]
+        public void LoggedInUser_CannotAddContactsWithSameContactId()
+        {
+            GivenContactsWithSameContactId();
+            WhenSaveContact();
+        }
+
         [TestInitialize]
         public void Initialize()
         {
@@ -172,6 +180,29 @@ namespace AddressBookServiceTests
                                new Contact
                                {
                                    ContactId = null,
+                                   UserName = _loggedInUser.UserName,
+                                   Addresses = new List<IAddress>(),
+                                   Emails = new List<IEmail>{new Email{EmailAddress = "email4@email.com"}}
+                               }
+                           };
+
+        }
+
+        private void GivenContactsWithSameContactId()
+        {
+            _someContacts = new List<IContact>
+                           {
+                               new Contact
+                               {
+                                   ContactId = "SameContactId",
+                                   UserName = _loggedInUser.UserName,
+                                   Addresses = new List<IAddress>(),
+                                   Emails = new List<IEmail>{new Email{EmailAddress = "email4@email.com"}}
+                               },
+
+                               new Contact
+                               {
+                                   ContactId = "SameContactId",
                                    UserName = _loggedInUser.UserName,
                                    Addresses = new List<IAddress>(),
                                    Emails = new List<IEmail>{new Email{EmailAddress = "email4@email.com"}}
