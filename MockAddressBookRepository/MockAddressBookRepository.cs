@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using AddressBookDataStore.Exceptions;
 using AddressBookDataStore.Interfaces;
 using AddressBookDomain.Model.Interfaces;
@@ -48,7 +49,7 @@ namespace MockAddressBookDataStore
         private void ValidateNewContactsBeingAddded(List<IContact> contacts)
         {
             ThrowExceptionIfAnyContactIsFoundWithNoContactId(contacts);
-            ThrowExceptionIfADuplicateItemFound<string, DuplicateContactIdFoundException>(contacts.Select(c => c.ContactId));
+            ThrowExceptionIfADuplicateItemFound<String, DuplicateContactIdFoundException>(contacts, contact => contact.ContactId);
             ThrowExceptionIfDuplicateEmailAddressesFoundInTheUserContacts(contacts);
         }
 
@@ -63,12 +64,12 @@ namespace MockAddressBookDataStore
             userContacts.AddRange(GetContacts(username));
             userContacts.AddRange(newContactsToBeAdded);            
 
-            ThrowExceptionIfADuplicateItemFound<List<IEmail>, DuplicateContactEmailAddressFoundException>(userContacts.Select(c => c.Emails));            
+            ThrowExceptionIfADuplicateItemFound<List<IEmail>, DuplicateContactEmailAddressFoundException>(userContacts, contact => contact.Emails);
         }
 
-        private static void ThrowExceptionIfADuplicateItemFound<T, TE>(IEnumerable<T> items) where TE : Exception, new()
+        private static void ThrowExceptionIfADuplicateItemFound<T1, TE>(IEnumerable<IContact> contacts , Expression<Func<IContact, T1>> filter) where TE : Exception, new()
         {
-            var duplicates = items.GroupBy(x => x)
+            var duplicates = contacts.Select(filter.Compile()).GroupBy(x => x)
                 .Where(g => g.Count() > 1)
                 .Select(y => y.Key)
                 .ToList();
