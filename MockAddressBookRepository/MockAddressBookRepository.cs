@@ -69,9 +69,9 @@ namespace MockAddressBookDataStore
             return username;
         }
 
-        private static void ThrowExceptionIfDuplicateItemsFound<T, TE>(IEnumerable<IContact> contacts , Expression<Func<IContact, T>> filter) where TE : Exception, new()
+        private static void ThrowExceptionIfDuplicateItemsFound<T, TE>(IEnumerable<IContact> contacts, Func<IContact, T> filter) where TE : Exception, new()
         {
-            var duplicates = contacts.Select(filter.Compile()).GroupBy(x => x)
+            var duplicates = contacts.Select(filter).GroupBy(x => x)
                 .Where(g => g.Count() > 1)
                 .Select(y => y.Key)
                 .ToList();
@@ -83,8 +83,8 @@ namespace MockAddressBookDataStore
         private static void ThrowExceptionIfAnyContactIsFoundWithNoContactId(IEnumerable<IContact> contacts)
         {
             var contactsWithNoContactIdSet = contacts.ToList().FindAll(c => string.IsNullOrEmpty(c.ContactId));
-            if(contactsWithNoContactIdSet.Any())
+            if (contactsWithNoContactIdSet.Any())
                 throw new ContactIdMustBeSetOnAllContactsException();
-        }      
+        }
     }
 }
