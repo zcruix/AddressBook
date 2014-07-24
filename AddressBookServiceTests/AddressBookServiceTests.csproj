@@ -51,6 +51,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="AddContactsTests.cs" />
+    <Compile Include="ContactsUtility.cs" />
     <Compile Include="UserContactsTests.cs" />
     <Compile Include="UserLoginTests.cs" />
     <Compile Include="AddUserTests.cs" />
