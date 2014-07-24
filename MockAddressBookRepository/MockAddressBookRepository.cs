@@ -43,7 +43,8 @@ namespace MockAddressBookDataStore
             var firstContact = contacts.FirstOrDefault();
 
             var userContacts = new List<IContact>();
-            if ( firstContact != null)
+
+            if (firstContact != null)
             {
                 var username = firstContact.UserName;
                 userContacts.AddRange(GetContacts(username));
@@ -54,12 +55,13 @@ namespace MockAddressBookDataStore
                     .Select(y => y.Key)
                     .ToList();
 
-                if(duplicateEmails.Any())
+                if (duplicateEmails.Any())
                     throw new DuplicateContactEmailAddressFoundException();
 
             }
 
             _contacts.AddRange(contacts);
+
             return true;
         }
     }

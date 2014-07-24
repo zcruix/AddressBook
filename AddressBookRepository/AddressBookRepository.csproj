@@ -46,7 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddressBookRepository.cs" />
-    <Compile Include="Exceptions\Class1.cs" />
+    <Compile Include="Exceptions\DuplicateContactEmailAddressFoundException.cs" />
     <Compile Include="Exceptions\DuplicateUserNameException.cs" />
     <Compile Include="Interfaces\IAddressBookRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
