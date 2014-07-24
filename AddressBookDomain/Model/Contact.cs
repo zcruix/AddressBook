@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using AddressBookDomain.Model.Interfaces;
 
 namespace AddressBookDomain.Model
@@ -7,6 +8,8 @@ namespace AddressBookDomain.Model
     public class Contact : IContact
     {
         public string UserName { get; set; }
+
+        [Required]
         public string ContactId { get; set; }
 
         public List<IAddress> Addresses { get; set; }

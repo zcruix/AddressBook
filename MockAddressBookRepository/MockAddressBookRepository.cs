@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using AddressBookDataStore.Exceptions;
 using AddressBookDataStore.Interfaces;
 using AddressBookDomain.Model.Interfaces;
@@ -39,30 +41,51 @@ namespace MockAddressBookDataStore
         public bool AddContacts(List<IContact> contacts)
         {
             if (contacts == null || !contacts.Any()) return false;
-
-            var firstContact = contacts.FirstOrDefault();
-
-            var userContacts = new List<IContact>();
-
-            if (firstContact != null)
-            {
-                var username = firstContact.UserName;
-                userContacts.AddRange(GetContacts(username));
-                userContacts.AddRange(contacts);
-
-                var duplicateEmails = userContacts.Select(x => x.Emails).GroupBy(x => x)
-                    .Where(g => g.Count() > 1)
-                    .Select(y => y.Key)
-                    .ToList();
-
-                if (duplicateEmails.Any())
-                    throw new DuplicateContactEmailAddressFoundException();
-
-            }
-
+            ValidateNewContactsBeingAddded(contacts);
             _contacts.AddRange(contacts);
-
             return true;
         }
+
+        private void ValidateNewContactsBeingAddded(List<IContact> contacts)
+        {
+            ThrowExceptionIfAnyContactIsFoundWithNoContactId(contacts);            
+            ThrowExceptionIfDuplicateEmailAddressesOrContactIdFoundInTheUserContacts(contacts);
+        }
+
+        private void ThrowExceptionIfDuplicateEmailAddressesOrContactIdFoundInTheUserContacts(IEnumerable<IContact> contacts)
+        {
+            var newContactsBeingAdded = contacts as IList<IContact> ?? contacts.ToList();
+
+            SearchForDuplicate<string, DuplicateContactIdFoundException>(newContactsBeingAdded.Select(c => c.ContactId));
+
+            var firstContact = newContactsBeingAdded.FirstOrDefault();
+            if (firstContact == null) return;
+
+            var username = firstContact.UserName;
+
+            var userContacts = new List<IContact>();
+            userContacts.AddRange(GetContacts(username));
+            userContacts.AddRange(newContactsBeingAdded);            
+
+            SearchForDuplicate<List<IEmail>, DuplicateContactEmailAddressFoundException>(userContacts.Select(c => c.Emails));            
+        }
+
+        private static void SearchForDuplicate<T, TE>(IEnumerable<T> items) where TE : Exception, new()
+        {
+            var duplicates = items.GroupBy(x => x)
+                .Where(g => g.Count() > 1)
+                .Select(y => y.Key)
+                .ToList();
+
+            if (duplicates.Any())
+                throw new TE();
+        }
+
+        private static void ThrowExceptionIfAnyContactIsFoundWithNoContactId(IEnumerable<IContact> contacts)
+        {
+            var contactsWithNoContactIdSet = contacts.ToList().FindAll(c => string.IsNullOrEmpty(c.ContactId));
+            if(contactsWithNoContactIdSet.Any())
+                throw new ContactIdMustBeSetOnAllContactsException();
+        }      
     }
 }

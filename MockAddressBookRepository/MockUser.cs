@@ -12,7 +12,7 @@ namespace MockAddressBookDataStore
         public static IUser LoggedInTestableUser(IAddressBookService addressBookService, string username,
             string validpassword)
         {
-            IUser user = AddTestableUser(addressBookService, username, validpassword);
+            var user = AddTestableUser(addressBookService, username, validpassword);
             addressBookService.Login(new LoginRequest
                                      {
                                          UserCredential = GetTestableUserCredentials(username, validpassword)
@@ -29,7 +29,7 @@ namespace MockAddressBookDataStore
                            UserCredential = GetTestableUserCredentials(username, validpassword)
                        };
 
-            ISaveUserResponse saveUserResponse = addressBookService.SaveUser(new SaveUserRequest {User = user});
+            var saveUserResponse = addressBookService.SaveUser(new SaveUserRequest {User = user});
 
             return saveUserResponse.HasBeenAdded ? saveUserResponse.User : user;
         }
@@ -40,9 +40,10 @@ namespace MockAddressBookDataStore
                            {
                                new Contact
                                {
+                                   ContactId = "ContactIdInitial",
                                    UserName = user.UserName,
                                    Addresses = new List<IAddress>(),
-                                   Emails = new List<IEmail>{new Email{EmailAddress = "email@email.com"}}
+                                   Emails = new List<IEmail>{new Email{EmailAddress = "emailInitial@email.com"}}
                                }
                            };
 

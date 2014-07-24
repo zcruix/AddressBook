@@ -21,16 +21,13 @@ namespace AddressBookServiceTests
 
         [TestMethod]
         public void ALoggedInUser_CanAddContact()
-        {
-            GivenThisContact();
-            WhenSaveContact();
+        {          
             ThenTheContactIsSaved();
         }
 
         [TestMethod]
         public void ALoggedInUser_CanAddContactAndFindContact()
         {
-            GivenThisContact();
             WhenSaveContact();
             ThenTheContactIsFound();
         }
@@ -50,15 +47,37 @@ namespace AddressBookServiceTests
             WhenSaveContact();            
         }
 
+        [TestMethod]
+        [ExpectedException(typeof(ContactIdMustBeSetOnAllContactsException))]
+        public void LoggedInUser_CannotAddContactsWithNoContactId()
+        {
+            GivenAContactWithNoContactId();
+            WhenSaveContact();
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ContactIdMustBeSetOnAllContactsException))]
+        public void LoggedInUser_CannotAddContactsWithNullContactId()
+        {
+            GivenAContactWithNullContactId();
+            WhenSaveContact();
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ContactIdMustBeSetOnAllContactsException))]
+        public void LoggedInUser_CannotAddContactsWithEmptyContactId()
+        {
+            GivenAContactWithEmptyContactId();
+            WhenSaveContact();
+        }
+
         [TestInitialize]
         public void Initialize()
         {
             var addressBookRepository = new MockAddressBookRepository();
             _addressBookService = new AddressBookService(addressBookRepository);
-
             GivenThisLoggedInUser(Username, Validpassword);
-
-            _addressBookService.SaveContacts(new SaveContactRequest { Contacts = MockUser.UserContacts(_loggedInUser) });
+            _saveContactsresponse = _addressBookService.SaveContacts(new SaveContactRequest { Contacts = MockUser.UserContacts(_loggedInUser) });            
         }
 
         private void GivenThisLoggedInUser(string username, string validpassword)
@@ -90,11 +109,6 @@ namespace AddressBookServiceTests
             AddContact(new SaveContactRequest { Contacts = _someContacts });
         }
 
-        private void GivenThisContact()
-        {
-            _someContacts = MockUser.UserContacts(_loggedInUser);
-        }
-
         private void GivenAContactWithAValidEmailAddress()
         {
             _someContacts = MockUser.UserContacts(_loggedInUser);
@@ -112,13 +126,58 @@ namespace AddressBookServiceTests
                            {
                                new Contact
                                {
+                                   ContactId = "ContactId",
+                                   UserName = _loggedInUser.UserName,
+                                   Addresses = new List<IAddress>(),
+                                   Emails = new List<IEmail>{new Email{EmailAddress = "email1@email.com"}}
+                               }
+                           };
+
+            _addressBookService.SaveContacts(new SaveContactRequest{Contacts = contacts});
+        }
+
+        private void GivenAContactWithNoContactId()
+        {
+            _someContacts = new List<IContact>
+                           {
+                               new Contact
+                               {
                                    UserName = _loggedInUser.UserName,
                                    Addresses = new List<IAddress>(),
                                    Emails = new List<IEmail>{new Email{EmailAddress = "email2@email.com"}}
                                }
                            };
 
-            _addressBookService.SaveContacts(new SaveContactRequest{Contacts = contacts});
+        }
+
+        private void GivenAContactWithEmptyContactId()
+        {
+            _someContacts = new List<IContact>
+                           {
+                               new Contact
+                               {
+                                   ContactId = string.Empty,
+                                   UserName = _loggedInUser.UserName,
+                                   Addresses = new List<IAddress>(),
+                                   Emails = new List<IEmail>{new Email{EmailAddress = "email3@email.com"}}
+                               }
+                           };
+
+        }
+
+        private void GivenAContactWithNullContactId()
+        {
+            _someContacts = new List<IContact>
+                           {
+                               new Contact
+                               {
+                                   ContactId = null,
+                                   UserName = _loggedInUser.UserName,
+                                   Addresses = new List<IAddress>(),
+                                   Emails = new List<IEmail>{new Email{EmailAddress = "email4@email.com"}}
+                               }
+                           };
+
         }
 
         private void ThenTheGetContactsShouldReturnTwoContacts()
