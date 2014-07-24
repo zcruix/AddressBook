@@ -33,7 +33,7 @@ namespace MockAddressBookDataStore
             return true;
         }
 
-        public List<IContact> GetContacts(string userName)
+        public List<IContact> GetContactsForUser(string userName)
         {
             return _contacts.FindAll(c => c.IsUser(userName));
         }
@@ -46,25 +46,27 @@ namespace MockAddressBookDataStore
             return true;
         }
 
-        private void ValidateNewContactsBeingAddded(List<IContact> contacts)
+        private void ValidateNewContactsBeingAddded(List<IContact> contactsToBeAdded)
         {
-            ThrowExceptionIfAnyContactIsFoundWithNoContactId(contacts);
-            ThrowExceptionIfADuplicateItemFound<String, DuplicateContactIdFoundException>(contacts, contact => contact.ContactId);
-            ThrowExceptionIfDuplicateEmailAddressesFoundInTheUserContacts(contacts);
+            ThrowExceptionIfAnyContactIsFoundWithNoContactId(contactsToBeAdded);
+            ThrowExceptionIfADuplicateItemFound<String, DuplicateContactIdFoundException>(contactsToBeAdded, contact => contact.ContactId);
+            ThrowExceptionIfADuplicateItemFound<List<IEmail>, DuplicateContactEmailAddressFoundException>(GetCombinedContactsList(contactsToBeAdded), contact => contact.Emails);
         }
 
-        private void ThrowExceptionIfDuplicateEmailAddressesFoundInTheUserContacts(IEnumerable<IContact> contacts)
+        private IEnumerable<IContact> GetCombinedContactsList(List<IContact> contacts)
         {
-            var newContactsToBeAdded = contacts as IList<IContact> ?? contacts.ToList();
-            var firstContact = newContactsToBeAdded.FirstOrDefault();
-            if (firstContact == null) return;
-
-            var username = firstContact.UserName;
             var userContacts = new List<IContact>();
-            userContacts.AddRange(GetContacts(username));
-            userContacts.AddRange(newContactsToBeAdded);            
+            userContacts.AddRange(GetContactsForUser(GetUserNameFromTheFirstContactInGivenList(contacts)));
+            userContacts.AddRange(contacts);
+            return userContacts;
+        }
 
-            ThrowExceptionIfADuplicateItemFound<List<IEmail>, DuplicateContactEmailAddressFoundException>(userContacts, contact => contact.Emails);
+        private static string GetUserNameFromTheFirstContactInGivenList(IEnumerable<IContact> contacts)
+        {
+            var firstContact = contacts.FirstOrDefault();
+            if (firstContact == null) return string.Empty;
+            var username = firstContact.UserName;
+            return username;
         }
 
         private static void ThrowExceptionIfADuplicateItemFound<T1, TE>(IEnumerable<IContact> contacts , Expression<Func<IContact, T1>> filter) where TE : Exception, new()

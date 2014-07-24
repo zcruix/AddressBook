@@ -24,7 +24,7 @@ namespace AddressBookDataStore
             throw new NotImplementedException();
         }
 
-        public List<IContact> GetContacts(string userName)
+        public List<IContact> GetContactsForUser(string userName)
         {
             throw new NotImplementedException();
         }

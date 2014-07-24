@@ -7,7 +7,7 @@ namespace AddressBookDataStore.Interfaces
     {
         IUser GetUser(string userName);
         bool AddUser(IUser user);
-        List<IContact> GetContacts(string userName);
+        List<IContact> GetContactsForUser(string userName);
         bool AddContacts(List<IContact> contacts);
     }
 }

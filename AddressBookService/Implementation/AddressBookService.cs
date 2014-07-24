@@ -66,7 +66,7 @@ namespace AddressBookServiceGateway.Implementation
             return _isUserAuthenticated
                 ? new GetContactsResponse
                   {
-                      Contacts = _addressBookRepository.GetContacts(getContactsRequest.User.UserCredential.UserName)
+                      Contacts = _addressBookRepository.GetContactsForUser(getContactsRequest.User.UserCredential.UserName)
                   }
                 : new GetContactsResponse {Contacts = new List<IContact>()};
         }
