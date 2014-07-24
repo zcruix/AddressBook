@@ -49,6 +49,10 @@
     <Compile Include="Contracts\GetContactsResponse.cs" />
     <Compile Include="Contracts\GetUserRequest.cs" />
     <Compile Include="Contracts\GetUserResponse.cs" />
+    <Compile Include="Contracts\RemoveUserRequest.cs" />
+    <Compile Include="Contracts\RemoveUserResponse.cs" />
+    <Compile Include="Interfaces\IRemoveUserRequest.cs" />
+    <Compile Include="Interfaces\IRemoveUserResponse.cs" />
     <Compile Include="Interfaces\ISaveUserRequest.cs" />
     <Compile Include="Interfaces\IAddUserResponse.cs" />
     <Compile Include="Interfaces\IGetUserRequest.cs" />

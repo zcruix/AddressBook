@@ -1,4 +1,6 @@
-﻿namespace AddressBookServiceGateway.Interfaces
+﻿using AddressBookDomain.Model.Interfaces;
+
+namespace AddressBookServiceGateway.Interfaces
 {
     public interface IAddressBookService
     {
@@ -9,5 +11,6 @@
         IRemoveContactsResponse RemoveContacts(IRemoveContactsRequest removeContactsRequest);
         IGetContactsResponse GetContacts(IGetContactsRequest getContactsRequest);
         ILogoutResponse Logout(ILogoutRequest logoutRequest);
+        IRemoveUserResponse RemoveUser(IRemoveUserRequest removeUserrequest);
     }
 }

@@ -75,5 +75,10 @@ namespace AddressBookServiceGateway.Implementation
         {
             throw new NotImplementedException();
         }
+
+        public IRemoveUserResponse RemoveUser(IRemoveUserRequest removeUserrequest)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
