@@ -40,7 +40,7 @@ namespace MockAddressBookDataStore
                            {
                                new Contact
                                {
-                                   UserName = user.UserCredential.UserName,
+                                   UserName = user.UserName,
                                    Addresses = new List<IAddress>(),
                                    Emails = new List<IEmail>{new Email{EmailAddress = "email@email.com"}}
                                }

@@ -112,7 +112,7 @@ namespace AddressBookServiceTests
                            {
                                new Contact
                                {
-                                   UserName = _loggedInUser.UserCredential.UserName,
+                                   UserName = _loggedInUser.UserName,
                                    Addresses = new List<IAddress>(),
                                    Emails = new List<IEmail>{new Email{EmailAddress = "email2@email.com"}}
                                }
